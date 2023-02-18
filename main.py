@@ -45,7 +45,6 @@ def main():
                 new.paste(attr1_image, (0, 0), mask=attr1_mask)
                 new.paste(attr2_image, (0, 0), mask=attr2_mask)
                 new.paste(attr3_image, (0, 0), mask=attr3_mask)
-                new = new.resize((32, 32))
                 new.save(OUTPUT_FILE_PATTERN.format(elem, elem2, elem3))
 
 
