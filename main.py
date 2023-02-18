@@ -11,11 +11,13 @@ OUTPUT_FILE_PATTERN = 'combined/{}_{}_{}.png'
 DIM = 76
 R = DIM / 2
 degrees = 0
-A = degrees * pi/180
+A = degrees * pi / 180
 
-ATTR1_PATH = [(0, 0), (R*cos(pi-A)+R, -R*sin(A)+R), (R, R), (R*cos(A)+R, -R*sin(A)+R), (2*R, 0), (0, 0)] 
-ATTR2_PATH = [(2*R, 0), (R*cos(A)+R, -R*sin(A)+R), (R, R), (R, R*2), (R*2, R*2), (2*R, 0)] 
-ATTR3_PATH = [(0, 0), (R*cos(pi-A)+R, -R*sin(A)+R), (R, R), (R, R*2), (0, R*2), (0, 0)] 
+ATTR1_PATH = [(0, 0), (R * cos(pi - A) + R, -R * sin(A) + R), (R, R), (R * cos(A) + R, -R * sin(A) + R), (2 * R, 0),
+              (0, 0)]
+ATTR2_PATH = [(2 * R, 0), (R * cos(A) + R, -R * sin(A) + R), (R, R), (R, R * 2), (R * 2, R * 2), (2 * R, 0)]
+ATTR3_PATH = [(0, 0), (R * cos(pi - A) + R, -R * sin(A) + R), (R, R), (R, R * 2), (0, R * 2), (0, 0)]
+
 
 def make_mask(path: List[Tuple[float, float]]) -> Image:
     """
