@@ -5,11 +5,16 @@ from typing import List, Tuple
 from PIL import Image
 from PIL import ImageDraw
 
-CUR_PATH = 'combined/{}'
+from crop_orbs import get_orb
+
+USE_SPRITES = True
+
+CUR_PATH = 'combined_spritesheets/{}'
 
 ELEMENTS = ['fire', 'water', 'wood', 'light', 'dark', 'nil']
-INPUT_FILE_PATTERN = 'originals/{}.png'
+INPUT_FILE_PATTERN = 'originals2/{}.png'
 OUTPUT_FILE_PATTERN = CUR_PATH + '/{}_{}_{}.png'
+BORDER_FILE_PATTERN = 'borders/{}.png'
 
 ITEMS_PER_FOLDER = 50
 
@@ -41,6 +46,12 @@ def make_folder(f):
         os.mkdir(path)
 
 
+def open_image(elem):
+    if not USE_SPRITES or elem == 'nil':
+        return Image.open(INPUT_FILE_PATTERN.format(elem)).resize((DIM, DIM))
+    return get_orb(elem).resize((DIM, DIM))
+
+
 def main():
     folder = 0
     i = -1
@@ -48,16 +59,14 @@ def main():
         print(i)
         make_folder(folder)
 
-        attr1_image = Image.open(INPUT_FILE_PATTERN.format(elem)).resize((DIM, DIM))
+        attr1_image = open_image(elem)
         attr1_mask = make_mask(ATTR1_PATH)
 
         for elem2 in ELEMENTS:
-            attr2_image = Image.open(INPUT_FILE_PATTERN.format(elem2)).resize((DIM, DIM))
+            attr2_image = open_image(elem2)
             attr2_mask = make_mask(ATTR2_PATH)
 
             for elem3 in ELEMENTS:
-                if elem == elem2 == elem3:
-                    continue
                 if elem3 == "nil":
                     continue
 
@@ -66,15 +75,31 @@ def main():
                     i = 0
                     folder = folder + 1
                     make_folder(folder)
-
-                attr3_image = Image.open(INPUT_FILE_PATTERN.format(elem3)).resize((DIM, DIM))
+                attr3_image = open_image(elem3)
                 attr3_mask = make_mask(ATTR3_PATH)
 
                 new = Image.new('RGBA', (DIM, DIM))
                 new.paste(attr1_image, (0, 0), mask=attr1_mask)
                 new.paste(attr2_image, (0, 0), mask=attr2_mask)
                 new.paste(attr3_image, (0, 0), mask=attr3_mask)
-                new.save(OUTPUT_FILE_PATTERN.format(folder, elem, elem2, elem3))
+
+                border_image = BORDER_FILE_PATTERN.format('DLR')
+                if elem == elem2 == elem3:
+                    # so as not to drop through to the next statement
+                    pass
+                elif elem == elem2:
+                    border_image = BORDER_FILE_PATTERN.format('DL')
+                elif elem == elem3:
+                    border_image = BORDER_FILE_PATTERN.format('DR')
+                elif elem2 == elem3:
+                    border_image = BORDER_FILE_PATTERN.format('LR')
+
+                border_file = Image.open(border_image).resize((DIM, DIM))
+                border_file = border_file.convert('RGBA')
+                new.paste(border_file, (0, 0), mask=border_file)
+
+                new_file_name = OUTPUT_FILE_PATTERN.format(folder, elem, elem2, elem3)
+                new.save(new_file_name)
 
 
 if __name__ == '__main__':
