@@ -7,17 +7,18 @@ from PIL import ImageDraw
 
 from crop_orbs import get_orb
 
-USE_SPRITES = True
+# dynamic config
+USE_SPRITES = False
+CUR_PATH = 'combined2/{}'
+INPUT_FILE_PATTERN = 'originals3/{}.png'
 
-CUR_PATH = 'combined_spritesheets/{}'
-
-ELEMENTS = ['fire', 'water', 'wood', 'light', 'dark', 'nil']
-INPUT_FILE_PATTERN = 'originals2/{}.png'
+# static config
 OUTPUT_FILE_PATTERN = CUR_PATH + '/{}_{}_{}.png'
 BORDER_FILE_PATTERN = 'borders/{}.png'
-
+ELEMENTS = ['fire', 'water', 'wood', 'light', 'dark', 'nil']
 ITEMS_PER_FOLDER = 50
 
+# math
 DIM = 76
 R = DIM / 2
 degrees = 15
@@ -55,15 +56,16 @@ def open_image(elem):
 def main():
     folder = 0
     i = -1
+    images = {elem:open_image(elem) for elem in ELEMENTS}
     for elem in ELEMENTS:
         print(i)
         make_folder(folder)
 
-        attr1_image = open_image(elem)
+        attr1_image = images[elem]
         attr1_mask = make_mask(ATTR1_PATH)
 
         for elem2 in ELEMENTS:
-            attr2_image = open_image(elem2)
+            attr2_image = images[elem2]
             attr2_mask = make_mask(ATTR2_PATH)
 
             for elem3 in ELEMENTS:
@@ -75,7 +77,7 @@ def main():
                     i = 0
                     folder = folder + 1
                     make_folder(folder)
-                attr3_image = open_image(elem3)
+                attr3_image = images[elem3]
                 attr3_mask = make_mask(ATTR3_PATH)
 
                 new = Image.new('RGBA', (DIM, DIM))
