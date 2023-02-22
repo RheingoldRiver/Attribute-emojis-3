@@ -1,5 +1,5 @@
 # Attribute-emojis-3
-There is no attribute-emojis-2, this is when Gungho added a 3rd attribute to the game
+There is no attribute-emojis-2, this is when Gungho added a 3rd attribute to the game. See also [Attribute-emojis](https://github.com/RheingoldRiver/Attribute-emojis)
 
 ## Config
 Edit this in `main.py`.
