@@ -56,7 +56,7 @@ def open_image(elem):
 def main():
     folder = 0
     i = -1
-    images = {elem:open_image(elem) for elem in ELEMENTS}
+    images = {elem: open_image(elem) for elem in ELEMENTS}
     for elem in ELEMENTS:
         print(i)
         make_folder(folder)
