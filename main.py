@@ -98,7 +98,7 @@ def main():
 
                 border_file = Image.open(border_image).resize((DIM, DIM))
                 border_file = border_file.convert('RGBA')
-                new.paste(border_file, (0, 0), mask=border_file)
+                new.alpha_composite(border_file, (0, 0))
 
                 new_file_name = OUTPUT_FILE_PATTERN.format(folder, elem, elem2, elem3)
                 new.save(new_file_name)
